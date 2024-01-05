@@ -1,0 +1,77 @@
+print(123)
+
+
+pip install pygame
+
+import pygame
+import random
+
+# 初始化遊戲板
+def initialize_board():
+    board = [[0] * 4 for _ in range(4)]
+    add_new_tile(board)
+    add_new_tile(board)
+    return board
+
+# 新增一個新的數字格子
+def add_new_tile(board):
+    empty_cells = [(i, j) for i in range(4) for j in range(4) if board[i][j] == 0]
+    if empty_cells:
+        i, j = random.choice(empty_cells)
+        board[i][j] = random.choice([2, 4])
+
+# 繪製遊戲畫面
+def draw(board):
+    for row in range(4):
+        for col in range(4):
+            pygame.draw.rect(screen, get_color(board[row][col]), (col * 100, row * 100, 100, 100))
+            if board[row][col] != 0:
+                font = pygame.font.Font(None, 36)
+                text = font.render(str(board[row][col]), True, (255, 255, 255))
+                text_rect = text.get_rect(center=(col * 100 + 50, row * 100 + 50))
+                screen.blit(text, text_rect)
+
+# 獲取每個數字對應的顏色
+def get_color(value):
+    colors = {
+        0: (205, 192, 180),
+        2: (238, 228, 218),
+        4: (237, 224, 200),
+        # 可以添加更多數字對應的顏色
+    }
+    return colors.get(value, (205, 192, 180))
+
+# 向左移動
+def move_left(board):
+    # 實現向左移動的邏輯
+    pass
+
+# 檢查遊戲是否結束
+def is_game_over(board):
+    # 檢查是否還有空格子或可以移動的格子
+    pass
+
+pygame.init()
+screen = pygame.display.set_mode((400, 400))
+pygame.display.set_caption('2048')
+
+board = initialize_board()
+running = True
+
+while running:
+    screen.fill((187, 173, 160))
+    draw(board)
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                move_left(board)
+                add_new_tile(board)
+                if is_game_over(board):
+                    print("Game Over!")
+            # 可以添加其他按鍵的移動邏輯
+
+pygame.quit()
